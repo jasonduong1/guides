@@ -8,7 +8,7 @@ To create a controller:
 rails generate controller <controller_name> #plural
 
 To create a model:
-rails generate model Name_model name:string price:integer
+rails generate model Name_model name:string price:integer #capitalize name of model
 https://guides.rubyonrails.org/getting_started.html#mvc-and-you-generating-a-model
 
 to use seeds.db:
