@@ -27,7 +27,7 @@
    
 3a. In migration file, if you want to add default values
   
-   ```
+   ```ruby
    t.boolean "admin", default: false
    ```
 
@@ -182,20 +182,37 @@ Content-Type: application/json
 
    This gives all your Rails controllers access to the methods `current_user` and `authenticate_user`.
 
+Creat action to be used to pass through as current_user:
+  [Make sure user_id is a column in the model in order to link them]
+
+  ```ruby
+  def create
+    dog = current_user.dogs.new(
+      name: params[:name],
+      age: params[:age],
+      breed: params[:breed],
+    )
+    if dog.save
+      render json: { message: "Dog successfully added" }, status: :created
+    else
+      render json: { errors: dog.errors.full_messages }, status: :bad_request
+    end
+  end
+  ```
 Now you can include a JWT in the headers of any web request you want to be logged into (the header key must be Authorization and the value must start with Bearer).
 
 Example HTTP request (with a JWT in the request headers)
 
 ```
-### Photos create
-POST http://localhost:3000/photos.json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjozLCJleHAiOjE2Mjk5OTI4NjR9.G2ExsrDYn3oE0vJkvm4T6Po2GbNpH5cqTEaVPVuK_MA
+### Dog create
+POST http://localhost:3000/dogs.json
+Authorization: Bearer {{jwt}}
 Content-Type: application/json
 
 {
-  "name": "Test name",
-  "width": 640,
-  "height": 480
+  "name": "Jack",
+  "age": 1,
+  "breed": "Terrier"
 }
 ```
 
